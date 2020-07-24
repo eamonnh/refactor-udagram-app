@@ -28,6 +28,13 @@ script:
   - docker tag udagram-api-user eamonnh/udagram-api-user:latest
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push eamonnh/udagram-api-user
+  # Build udagram-reverse-proxy
+  - cd $TRAVIS_BUILD_DIR/udagram-reverse-proxy
+  - docker --version # print the version for logging
+  - docker build -t udagram-reverse-proxy .
+  - docker tag udagram-reverse-proxy eamonnh/udagram-reverse-proxy:latest
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push eamonnh/udagram-reverse-proxy
 
 # Tasks to perform after the process is successful. 
 after_success:
