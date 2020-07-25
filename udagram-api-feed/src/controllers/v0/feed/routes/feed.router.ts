@@ -6,6 +6,7 @@ import * as AWS from '../../../../aws';
 import * as c from '../../../../config/config';
 
 const router: Router = Router();
+const { v4: uuidv4 } = require('uuid');
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (!req.headers || !req.headers.authorization) {
@@ -28,6 +29,10 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 
 // Get all feed items
 router.get('/', async (req: Request, res: Response) => {
+  //Log request id and time
+  let pid = uuidv4();
+  console.log(`: ${pid} - requested all posts at ` + new Date().toLocaleString());
+
   const items = await FeedItem.findAndCountAll({order: [['id', 'DESC']]});
   items.rows.map((item) => {
     if (item.url) {
@@ -35,6 +40,7 @@ router.get('/', async (req: Request, res: Response) => {
     }
   });
   res.send(items);
+  console.log(`: ${pid} - All posts returned at ` + new Date().toLocaleString());
 });
 
 // Get a feed resource
